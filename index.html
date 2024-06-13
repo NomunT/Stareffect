@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Star Transition</title>
+<style>
+  .container {
+    position: relative;
+    width: 500px;  /* Adjust width as needed */
+    height: 500px;  /* Adjust height as needed */
+    overflow: hidden;
+  }
+  .bad-star, .good-star {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .good-star {
+    clip: rect(0, 0, 500px, 0);
+  }
+  .slider {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 15px;
+    height: 100%;
+    background: black;
+    cursor: ew-resize;
+    z-index: 10;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <img src="bad_star.png" class="bad-star">
+  <img src="good_star.png" class="good-star">
+  <div class="slider"></div>
+</div>
+
+<script>
+  const slider = document.querySelector('.slider');
+  const goodStar = document.querySelector('.good-star');
+
+  slider.addEventListener('mousedown', () => {
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', () => {
+      document.removeEventListener('mousemove', onMouseMove);
+    });
+  });
+
+  function onMouseMove(event) {
+    const containerRect = slider.parentElement.getBoundingClientRect();
+    let newLeft = event.clientX - containerRect.left;
+    if (newLeft < 0) newLeft = 0;
+    if (newLeft > containerRect.width) newLeft = containerRect.width;
+    slider.style.left = newLeft + 'px';
+    goodStar.style.clip = `rect(0, ${newLeft}px, ${containerRect.height}px, 0)`;
+  }
+</script>
+
+</body>
+</html>
